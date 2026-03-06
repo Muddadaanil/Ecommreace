@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import AdminSidebarLayout from "./components/AdminSidebarLayout";
 import SiteFooter from "./components/SiteFooter";
@@ -22,13 +22,28 @@ import UserLoginPage from "./pages/UserLoginPage";
 import UserRegisterPage from "./pages/UserRegisterPage";
 
 function App() {
-  const [medicines, setMedicines] = useState(medicinesData);
+  const [medicines, setMedicines] = useState(() => {
+    const storedMedicines = localStorage.getItem("medicines");
+    if (!storedMedicines) {
+      return medicinesData;
+    }
+
+    try {
+      return JSON.parse(storedMedicines);
+    } catch {
+      return medicinesData;
+    }
+  });
   const [users, setUsers] = useState(usersData);
   const [orders, setOrders] = useState(ordersData);
   const [cartItems, setCartItems] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [latestOrder, setLatestOrder] = useState(null);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("medicines", JSON.stringify(medicines));
+  }, [medicines]);
 
   const dashboardStats = useMemo(
     () => ({
@@ -81,12 +96,16 @@ function App() {
     if (!foundUser) {
       return false;
     }
+    setIsAdminAuthenticated(false);
     setCurrentUser(foundUser);
     return true;
   };
 
   const loginAdmin = ({ email, password }) => {
     const isValid = email === "admin@careplus.com" && password === "Admin@123";
+    if (isValid) {
+      setCurrentUser(null);
+    }
     setIsAdminAuthenticated(isValid);
     return isValid;
   };
@@ -125,7 +144,11 @@ function App() {
 
   return (
     <div className="app-shell">
-      <SiteNavbar cartCount={cartItems.length} />
+      <SiteNavbar
+        cartCount={cartItems.length}
+        currentUser={currentUser}
+        isAdminAuthenticated={isAdminAuthenticated}
+      />
       <main>
         <Routes>
           <Route path="/" element={<HomePage medicines={medicines.slice(0, 4)} onAddToCart={addToCart} />} />

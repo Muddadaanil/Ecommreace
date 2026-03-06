@@ -14,7 +14,7 @@ function UserLoginPage({ onLogin }) {
     event.preventDefault();
     const success = onLogin(credentials);
     if (!success) {
-      setError("Invalid email or password. Try sample user: olivia@example.com / User@123");
+      setError("Invalid email or password. Try sample user: user@example.com / User@123");
       return;
     }
     navigate("/medicines");
@@ -29,6 +29,9 @@ function UserLoginPage({ onLogin }) {
               <div className="card-body p-4 p-md-5">
                 <h3 className="mb-3">User Login</h3>
                 <p className="text-muted">Sign in to manage cart and place an order.</p>
+                <div className="alert alert-info py-2">
+                  Default user login: <strong>user@example.com</strong> / <strong>User@123</strong>
+                </div>
                 {error ? <div className="alert alert-danger">{error}</div> : null}
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">

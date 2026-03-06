@@ -29,6 +29,9 @@ function AdminLoginPage({ onLogin }) {
               <div className="card-body p-4 p-md-5">
                 <h3 className="mb-3">Admin Login</h3>
                 <p className="text-muted">Access the admin dashboard and management screens.</p>
+                <div className="alert alert-info py-2">
+                  Default admin login: <strong>admin@careplus.com</strong> / <strong>Admin@123</strong>
+                </div>
                 {error ? <div className="alert alert-danger">{error}</div> : null}
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">

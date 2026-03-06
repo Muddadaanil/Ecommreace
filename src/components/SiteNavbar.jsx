@@ -1,6 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
 
-function SiteNavbar({ cartCount }) {
+function SiteNavbar({ cartCount, currentUser, isAdminAuthenticated }) {
+  const showAdminMenu = !currentUser || isAdminAuthenticated;
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark site-navbar sticky-top shadow-sm">
       <div className="container">
@@ -46,29 +48,31 @@ function SiteNavbar({ cartCount }) {
                 User Login
               </NavLink>
             </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Admin
-              </a>
-              <ul className="dropdown-menu dropdown-menu-end">
-                <li>
-                  <NavLink className="dropdown-item" to="/admin/login">
-                    Admin Login
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="/admin/dashboard">
-                    Dashboard
-                  </NavLink>
-                </li>
-              </ul>
-            </li>
+            {showAdminMenu ? (
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Admin
+                </a>
+                <ul className="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <NavLink className="dropdown-item" to="/admin/login">
+                      Admin Login
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/admin/dashboard">
+                      Dashboard
+                    </NavLink>
+                  </li>
+                </ul>
+              </li>
+            ) : null}
             <li className="nav-item ms-lg-2">
               <NavLink className="btn btn-light btn-sm position-relative px-3 mt-2 mt-lg-0" to="/cart">
                 <i className="bi bi-cart3 me-1"></i>
